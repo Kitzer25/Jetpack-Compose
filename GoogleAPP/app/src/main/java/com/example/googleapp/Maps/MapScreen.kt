@@ -34,12 +34,14 @@ fun MapScreen() {
         LatLng(-16.4205151, -71.495209),
         LatLng(-16.3524187, -71.5675994)
     )
-
+    /*
     locations.forEach { location ->
         Marker(
-            state =
+            state =rememberMarkerState(position = location),
+            title = "Ubicacion",
+            snippet = "Puntos de encuentro"
         )
-    }
+    }*/
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Añadir GoogleMap al layout
@@ -47,6 +49,16 @@ fun MapScreen() {
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState
         ) {
+
+            //Marcador Customizable
+            CustomMapMarker(
+                imageUrl = "https://api.hinlen.com/media/artist/2025/02/15/287bb6f4a04243ee9af34161f6e6949c.webp",
+                fullName = "Mauricio Alexander",
+                location = ArequipaLocation,
+                onClick = { }
+            )
+
+
             // Añadir marcador
             /*Marker(
                 state = rememberMarkerState(position = ArequipaLocation),
@@ -56,10 +68,10 @@ fun MapScreen() {
                 title = "Arequipa, Perú",
                 snippet = "Población: 1.606.000 (2024)"
 
-            )*/
+            )
 
-            CustomMap
 
+            //Marcador con Ícono
             MarkerComposable (
                 state = rememberMarkerState(position = ArequipaLocation),
                 title = "Centro Histórico"
@@ -77,7 +89,7 @@ fun MapScreen() {
                     )
 
                 }
-            }
+            }*/
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.example.googleapp.Maps
 
+import android.R.attr.data
 import android.location.Location
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.content.MediaType.Companion.All
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import coil.Coil.imageLoader
 import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
 import coil.request.SuccessResult
 import com.android.volley.toolbox.ImageRequest
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -46,30 +49,17 @@ fun CustomMapMarker(
     location: LatLng,
     onClick: () -> Unit
 ) {
-    val context = LocalContext.current
     val markerState = remember { MarkerState(position = location) }
     val shape = RoundedCornerShape(20.dp, 20.dp, 20.dp, 0.dp)
-
-    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-
-    // Cargar imagen con Coil manualmente
-    LaunchedEffect(imageUrl) {
-        if (!imageUrl.isNullOrEmpty()) {
-            val loader = ImageLoader(context)
-            val request = ImageRequest.Builder(context)
-                .data(imageUrl)
-                .allowHardware(false)
-                .build()
-            val result = (loader.execute(request) as? SuccessResult)?.drawable
-            result?.let { drawable ->
-                val bitmap = drawable.toBitmap()
-                imageBitmap = bitmap.asImageBitmap()
-            }
-        }
-    }
+    val painter = rememberAsyncImagePainter(
+        coil.request.ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .allowHardware(false)
+            .build()
+    )
 
     MarkerComposable(
-        keys = arrayOf(fullName, imageBitmap),
+        keys = arrayOf(fullName, painter.state),
         state = markerState,
         title = fullName,
         anchor = Offset(0.5f, 1f),
@@ -86,18 +76,23 @@ fun CustomMapMarker(
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (imageBitmap != null) {
+            if (!imageUrl.isNullOrEmpty()) {
+
+                //Configuración de imagen extraida
                 Image(
-                    bitmap = imageBitmap!!,
+                    painter = painter,
                     contentDescription = "Profile Image",
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .size(44.dp)
+                        .clip(shape),
                     contentScale = ContentScale.Crop
                 )
             } else {
                 Text(
                     text = fullName.take(1).uppercase(),
                     color = Color.White,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

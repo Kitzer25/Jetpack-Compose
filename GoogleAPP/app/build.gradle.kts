@@ -40,7 +40,8 @@ android {
 }
 
 dependencies {
-    implementation("io.coil-kt:coil:2.5.0")
+    // Coil Implementation
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.ui:ui-graphics")
 
     // Google Maps SDK for Android
