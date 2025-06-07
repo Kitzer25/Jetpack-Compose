@@ -2,11 +2,13 @@ package com.example.googleapp.Maps
 
 import android.R.attr.data
 import android.location.Location
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.content.MediaType.Companion.All
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -58,6 +60,9 @@ fun CustomMapMarker(
             .build()
     )
 
+    //Expandir Marcador
+    var ExpandMarker by remember { mutableStateOf(false) }
+
     MarkerComposable(
         keys = arrayOf(fullName, painter.state),
         state = markerState,
@@ -65,6 +70,7 @@ fun CustomMapMarker(
         anchor = Offset(0.5f, 1f),
         onClick = {
             onClick()
+            ExpandMarker = !ExpandMarker
             true
         }
     ) {
@@ -73,21 +79,45 @@ fun CustomMapMarker(
                 .size(48.dp)
                 .clip(shape)
                 .background(Color.LightGray)
-                .padding(4.dp),
+                .padding(4.dp)
+                .animateContentSize()
+                .then(if (ExpandMarker) Modifier.size(96.dp)
+                else Modifier.size(48.dp)),
             contentAlignment = Alignment.Center
         ) {
             if (!imageUrl.isNullOrEmpty()) {
 
-                //Configuración de imagen extraida
-                Image(
-                    painter = painter,
-                    contentDescription = "Profile Image",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .size(44.dp)
-                        .clip(shape),
-                    contentScale = ContentScale.Crop
-                )
+                if(!ExpandMarker){
+                    //Configuración de imagen extraida
+                    Image(
+                        painter = painter,
+                        contentDescription = "Perfil Común",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .size(44.dp)
+                            .clip(shape),
+                        contentScale = ContentScale.Crop
+                    )
+
+                }else {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Image(
+                            painter = painter,
+                            contentDescription = "Imagen Aumentada",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f)
+                                .clip(RoundedCornerShape(16.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                        Text(
+                            text = fullName,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
+
             } else {
                 Text(
                     text = fullName.take(1).uppercase(),

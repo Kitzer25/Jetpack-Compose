@@ -29,19 +29,12 @@ fun MapScreen() {
         position = CameraPosition.fromLatLngZoom(ArequipaLocation, 12f)
     }
 
+    //Marcadores Múltiples
     val locations = listOf(
         LatLng(-16.433415, -71.5442652),
         LatLng(-16.4205151, -71.495209),
         LatLng(-16.3524187, -71.5675994)
     )
-    /*
-    locations.forEach { location ->
-        Marker(
-            state =rememberMarkerState(position = location),
-            title = "Ubicacion",
-            snippet = "Puntos de encuentro"
-        )
-    }*/
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Añadir GoogleMap al layout
@@ -49,6 +42,15 @@ fun MapScreen() {
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState
         ) {
+
+            //Iteración por cada marcador agregado
+            locations.forEach { location ->
+                Marker(
+                    state =rememberMarkerState(position = location),
+                    title = "Ubicacion",
+                    snippet = "Puntos de encuentro"
+                )
+            }
 
             //Marcador Customizable
             CustomMapMarker(
@@ -68,11 +70,11 @@ fun MapScreen() {
                 title = "Arequipa, Perú",
                 snippet = "Población: 1.606.000 (2024)"
 
-            )
+            )*/
 
 
             //Marcador con Ícono
-            MarkerComposable (
+            /*MarkerComposable (
                 state = rememberMarkerState(position = ArequipaLocation),
                 title = "Centro Histórico"
             ){
