@@ -40,7 +40,8 @@ android {
 }
 
 dependencies {
-    implementation("com.google.maps.android:maps-compose:latest-version")
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("androidx.compose.ui:ui-graphics")
 
     // Google Maps SDK for Android
     implementation(libs.places)
