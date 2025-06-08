@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.googleapp.Maps.MapScreen
+import com.example.googleapp.Maps.ViewModel.MapViewModel
 import com.example.googleapp.ui.theme.GoogleAPPTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +12,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GoogleAPPTheme {
-                MapScreen()
+                val mapViewModel = MapViewModel()
+                MapScreen(mapViewModel)
             }
 
         }

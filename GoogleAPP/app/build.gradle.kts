@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -40,16 +42,19 @@ android {
 }
 
 dependencies {
-    // Coil Implementation
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("androidx.compose.ui:ui-graphics")
-
     // Google Maps SDK for Android
     implementation(libs.places)
     implementation(libs.play.services.maps)
 
     // Google maps Compose
     implementation(libs.maps.compose)
+
+    // Coil Implementation
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.compose.ui:ui-graphics")
+
+    //Dependencia Timber
+    implementation ("com.jakewharton.timber:timber:5.0.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

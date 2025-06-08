@@ -3,7 +3,7 @@ mapsCompose = "4.3.3"
 places = "3.5.0"
 playServicesMaps = "19.0.0"
 
-agp = "8.10.1"
+agp = "8.9.1"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
