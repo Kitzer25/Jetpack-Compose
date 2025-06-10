@@ -1,6 +1,8 @@
 package com.example.animations.animaciones
 
 import android.R
+import android.R.attr.onClick
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -9,16 +11,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,6 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.animations.animaciones.Estados
 
 //@Preview(showBackground = true)
 @Composable
@@ -106,7 +112,7 @@ fun ColorStateChange(){
     }
 }
 
-@Preview
+//@Preview
 @Composable
 fun ChangeAttributes(){
     var movimiento by remember { mutableStateOf(false) }
@@ -139,4 +145,69 @@ fun ChangeAttributes(){
     }
 
 
+}
+
+
+@Preview
+@Composable
+fun EstadoAnimation() {
+    var estado by remember { mutableStateOf(Estados.Cargando) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFB6B6B6)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                onClick = { estado = Estados.Cargando },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF479D4A),
+                    contentColor = Color(0xFFFFFFFF)
+                )) {
+                Text("Cargando")
+            }
+            Button(onClick = { estado = Estados.Contenido },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFC23636),
+                    contentColor = Color(0xFFFFFFFF))
+            ) {
+                Text("Contenido")
+            }
+            Button(onClick = { estado = Estados.Error },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF000000),
+                    contentColor = Color(0xFFFFFFFF))
+                ) {
+                Text("Error")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Contenido animado
+        AnimatedContent(
+            targetState = estado,
+            transitionSpec = {
+                fadeIn(animationSpec = tween(700)) togetherWith
+                        fadeOut(animationSpec = tween(500))
+            },
+            label = "AnimacionEstado"
+        ) { currentState ->
+            when (currentState) {
+                Estados.Cargando -> {
+                    Text("Cargando...", fontSize = 24.sp, color = Color.Gray)
+                }
+                Estados.Contenido -> {
+                    Text("Contenido mostrado ✅", fontSize = 24.sp, color = Color(0xFF00796B))
+                }
+                Estados.Error -> {
+                    Text("Ocurrió un error ❌", fontSize = 24.sp, color = Color.Red)
+                }
+            }
+        }
+    }
 }
