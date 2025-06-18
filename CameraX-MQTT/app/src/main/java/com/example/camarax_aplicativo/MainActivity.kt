@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.camarax_aplicativo.CamaraX.CameraScreen
+import com.example.camarax_aplicativo.CamaraX.Camerax_MQTT
 import com.example.camarax_aplicativo.ui.theme.CamaraXAplicativoTheme
 
 
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CamaraXAplicativoTheme {
-                CameraScreen()
+                Camerax_MQTT()
             }
         }
     }

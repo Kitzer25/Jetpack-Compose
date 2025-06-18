@@ -1,16 +1,20 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id ("kotlin-kapt")
 }
 
 android {
-    namespace = "com.example.camarax_aplicativo"
+    namespace = "com.example.autocameraesp32"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.camarax_aplicativo"
-        minSdk = 22
+        applicationId = "com.example.autocameraesp32"
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -37,19 +41,13 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
+val camerax = "1.3.0-rc01"
+
 dependencies {
-    /* Dependencias MQTT */
-    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
-
-    /* Dependencias CameraX */
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.extensions)
-
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

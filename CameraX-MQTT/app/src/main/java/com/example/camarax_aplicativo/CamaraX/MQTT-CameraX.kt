@@ -23,9 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.example.camarax_aplicativo.MQTT.MQTTmanager
+import com.example.camarax_aplicativo.MQTT.MqttClientManager
 import java.io.File
-import kotlin.io.encoding.Base64
+
 
 @Composable
 fun Camerax_MQTT() {
@@ -57,11 +57,11 @@ fun Camerax_MQTT() {
                     val imagen = photoFile.readBytes()
                     val imagenBase64 = android.util.Base64.encodeToString(
                         imagen,
-                        android.util.Base64.DEFAULT
-                    )
-                    MQTTmanager.publish("Android/Fotografia", imagenBase64)
+                        android.util.Base64.DEFAULT)
+                    MqttClientManager.publish("Android/Fotografia", imagenBase64)
                     Toast.makeText(ctx, "Imagen Enviada", Toast.LENGTH_SHORT).show()
                 }
+
 
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(ctx, "Error en la captura: ${exc.message}", Toast.LENGTH_SHORT).show()
@@ -73,19 +73,20 @@ fun Camerax_MQTT() {
 
     /* Conexión MQTT con suscripción */
     LaunchedEffect(Unit) {
-        MQTTmanager.connect(
-            context,
-            "tcp://161.132.48.224:1883",
+        MqttClientManager.connect(
+            serverUri = "tcp://161.132.48.224:1883",
             username = "esp32",
-            password = "tecsup123"
-        ) {
-            MQTTmanager.subcribe("ESP32/Captura") { mensaje ->
-                if (mensaje == "fotografiar") {
-                    capturarImagen_Enviar()
-                }
+            password = "tecsup123",
+            onConnected = {
+                MqttClientManager.subscribe("ESP32/Captura")
+            }
+        ) { mensaje ->
+            if (mensaje == "fotografiar") {
+                capturarImagen_Enviar()
             }
         }
     }
+
 
     /* Permiso de cámara */
     val launcher = rememberLauncherForActivityResult(
